@@ -14,14 +14,21 @@ db.serialize(() => {
     const stmt = db.prepare('INSERT INTO lorem VALUES (?)')
 
     for (let i = 0; i < 10; i++) {
-        stmt.run(`Ipsum ${i}`)
+        stmt.run(`Car ${i}`)
     }
 
     stmt.finalize()
+})
 
-    db.each('SELECT rowid AS id, info FROM lorem', (err, row) => {
-        console.log(`${row.id}: ${row.info}`)
+app.get('/api/cars', async function (req, res, next) {
+    // db.all('SELECT vin, ownerId, make, mileage, price FROM Car', (err, rows) => {
+    db.all('SELECT * FROM lorem', (err, rows) => {
+        if (rows.length > 1) {
+        res.type('application/json')
+        res.send(rows)
+    }
     })
+    
 })
 
 app.listen(8080);
