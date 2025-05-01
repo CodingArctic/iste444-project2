@@ -4,13 +4,15 @@ import Nav from './components/Nav'
 import './App.css'
 
 const App = () => {
-	const { content } = useContent()
+	const { state } = useContent()
 
 	return (
-		<div className="app">
+		<div className='app'>
 			<Nav />
 			{/* this is the current page that is set via contentProvider */}
-			{content}
+			<div className='content-container'>
+				{state.content}
+			</div>
 		</div>
 	)
 }
