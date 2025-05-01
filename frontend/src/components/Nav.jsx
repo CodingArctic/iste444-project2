@@ -17,10 +17,20 @@ const Nav = () => {
         setContent('home', <Home />);
     }
 
+    const handleMyListings = () => {
+        setContent('about', <MyListings />);
+    }
+
     return (
         <div className='nav-container'>
             <div className='nav'>
-                <h1 onClick={handleHome} className='nav-title'>CarMart</h1>
+                <div className='nav-left'>
+                    <h1 onClick={handleHome} className='nav-title'>CarMart</h1>
+                    <ul className='nav-items'>
+                        <li onClick={handleHome} className={`nav-item ${state.name === 'home' ? 'active' : ''}`}>Home</li>
+                        <li onClick={handleMyListings} className={`nav-item ${state.name === 'about' ? 'active' : ''}`}>My Listings</li>
+                    </ul>
+                </div>
                 {state.name !== 'login' && <button onClick={handleLogin} className='outline-btn'>{loggedIn ? 'Logout' : 'Login'}</button>}
             </div>
         </div>
