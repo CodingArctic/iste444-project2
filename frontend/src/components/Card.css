@@ -1,0 +1,34 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background-color:var(--white);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--gray-200);
+    max-width: 250px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-400);
+}
+
+.card-title {
+    font-size: 1.25rem;
+}
+
+.card-details {
+    color: var(--gray-400);
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-100);
+    margin-bottom: 0.5rem;
+}
+
+.card-button {
+    margin-left: auto;
+}
