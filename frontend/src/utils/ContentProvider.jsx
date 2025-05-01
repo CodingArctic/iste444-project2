@@ -1,7 +1,7 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import Home from '../pages/Home';
 
-export const ContentContext = createContext();
+const ContentContext = createContext();
 
 export const ContentProvider = ({ children }) => {
   const [content, setContent] = useState(<Home />);
