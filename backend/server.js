@@ -31,5 +31,35 @@ app.get('/api/cars', async function (req, res, next) {
     
 })
 
+app.get('/api/cars/:id', async function (req, res, next) {
+  db.get('SELECT * FROM lorem WHERE rowid = ?', req.params.id, (err, row) => {
+    if (err) {
+        res.status(500 )
+        res.send(err.message)
+    } else if (row) {
+        res.type('application/json')
+        res.send(row)
+    }
+    else {
+        res.status(404)
+        res.send('Car not found')
+    }
+})
+})
+
+app.delete('/api/cars/:id', async function (req, res, next) {
+    db.run('DELETE FROM lorem WHERE rowid = ?', req.params.id, function (err) {
+        if (err) {
+            res.status(500)
+            res.send(err.message)
+        } else if (this.changes === 0) {
+            res.status(404)
+            res.send('Car not found')
+        } else {
+            res.status(204).send()
+        }
+    })
+})
+
 app.listen(8080);
 console.log('Express started on localhost:8080');
