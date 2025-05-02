@@ -30,17 +30,19 @@ const MyListings = () => {
         <div className='home-container'>
             <h2 className='home-title'>My Listings</h2>
             <p className='home-description'>The cars you have listed on the marketplace. You can view, edit, or delete them.</p>
-            {loading ? (
-                <p>Loading...</p>
-            ) : cars.length === 0 ? (
-                <p>No cars available.</p>
-            ) : (
-                <div className='home-cards'>
-                    {cars.map((car, index) => (
-                        <Card key={index} car={car} isOwn />
-                    ))}
-                </div>
-            )}
+            <div className='home-cards'>
+                {loading ? (
+                    <p>Loading...</p>
+                ) : cars.length === 0 ? (
+                    <p>No cars available.</p>
+                ) : (
+                    <>
+                        {cars.map((car, index) => (
+                            <Card key={index} car={car} isOwn />
+                        ))}
+                    </>
+                )}
+            </div>
         </div>
 	)
 }

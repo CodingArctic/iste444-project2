@@ -36,11 +36,11 @@ const Home = () => {
                 ) : cars.length === 0 ? (
                     <p>No cars available.</p>
                 ) : (
-                    <div className='home-cards'>
+                    <>
                         {cars.map((car, index) => (
                             <Card key={index} car={car} />
                         ))}
-                    </div>
+                    </>
                 )}
             </div>
         </div>
