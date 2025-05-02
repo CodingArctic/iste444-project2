@@ -4,21 +4,22 @@ var logger = require('morgan');
 var app = express();
 
 const sqlite3 = require('sqlite3').verbose()
-const db = new sqlite3.Database(':memory:')
+const db = new sqlite3.Database('./db/db.sqlite')
 
 app.use(logger('dev'));
 app.use(express.json());
 
-db.serialize(() => {
-    db.run('CREATE TABLE lorem (info TEXT)')
-    const stmt = db.prepare('INSERT INTO lorem VALUES (?)')
+// TODO: write actual structure for car and user table
+// db.serialize(() => {
+//     db.run('CREATE TABLE lorem (info TEXT)')
+//     const stmt = db.prepare('INSERT INTO lorem VALUES (?)')
 
-    for (let i = 0; i < 10; i++) {
-        stmt.run(`Car ${i}`)
-    }
+//     for (let i = 0; i < 10; i++) {
+//         stmt.run(`Car ${i}`)
+//     }
 
-    stmt.finalize()
-})
+//     stmt.finalize()
+// })
 
 app.get('/api/cars', async function (req, res, next) {
     // db.all('SELECT vin, ownerId, make, mileage, price FROM Car', (err, rows) => {
