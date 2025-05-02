@@ -29,6 +29,22 @@
     margin-bottom: 0.5rem;
 }
 
+.card-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
 .card-button {
-    margin-left: auto;
+    align-self: flex-end;
+}
+
+.card-button.delete {
+    background-color: var(--red-400);
+    border-color: var(--red-400);
+}
+
+.card-button.delete:hover {
+    background-color: var(--red-600);
+    border-color: var(--red-600);
 }

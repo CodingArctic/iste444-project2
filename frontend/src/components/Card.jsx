@@ -1,7 +1,7 @@
 import React from 'react';
 import './Card.css';
 
-const Card = () => {
+const Card = ({ isOwn = false }) => {
     return (
         <div className='card'>
             <h3 className='card-title'>Car Name</h3>
@@ -11,7 +11,14 @@ const Card = () => {
                 <li>Year</li>
                 <li>Mileage</li>
             </ul>
-            <button className='card-button'>Price</button>
+            {isOwn ? (
+                <div className='card-buttons'>
+                    <button className='card-button outline-btn'>Edit</button>
+                    <button className='card-button delete'>Delete</button>
+                </div>
+            ) : (
+                <button className='card-button'>Price</button>
+            )}
         </div>
     );
 };

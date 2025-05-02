@@ -3,6 +3,7 @@ import { useContent } from '../utils/ContentProvider';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
 import './Nav.css';
+import MyListings from '../pages/MyListings';
 
 const Nav = () => {
     const { state, setContent } = useContent();
