@@ -22,7 +22,7 @@ db.serialize(() => {
 
 app.get('/api/cars', async function (req, res, next) {
     // db.all('SELECT vin, ownerId, make, mileage, price FROM Car', (err, rows) => {
-    db.all('SELECT * FROM lorem', (err, rows) => {
+    db.all('SELECT rowid AS id, * FROM lorem', (err, rows) => {
         if (rows.length > 1) {
         res.type('application/json')
         res.send(rows)
@@ -45,6 +45,18 @@ app.get('/api/cars/:id', async function (req, res, next) {
         res.send('Car not found')
     }
 })
+})
+
+app.post('/api/cars', async function (req, res, next) {
+    db.run("INSERT INTO lorem VALUES (?)", req.query.name, function (err) {
+        if (err) {
+            res.status(500)
+            res.send(err.message)
+        } else if (this.changes === 1) {
+            res.status(201).send()
+        }
+    })
+
 })
 
 app.delete('/api/cars/:id', async function (req, res, next) {
