@@ -1,5 +1,5 @@
 .home-container {
-    max-width: 1200px;
+    max-width: 1250px;
     width: 100%;
     margin: 0 auto;
     padding: 2rem 0;
@@ -7,11 +7,12 @@
 
 .home-cards {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1250px) {
     .home-container {
         padding: 1rem;
     }

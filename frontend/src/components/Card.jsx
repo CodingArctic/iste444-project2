@@ -1,10 +1,10 @@
 import React from 'react';
 import './Card.css';
 
-const Card = ({ isOwn = false }) => {
+const Card = ({ car, isOwn = false }) => {
     return (
         <div className='card'>
-            <h3 className='card-title'>Car Name</h3>
+            <h3 className='card-title'>{car.info}</h3>
             <ul className='card-details'>
                 <li>Make</li>
                 <li>Model</li>

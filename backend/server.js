@@ -1,5 +1,6 @@
 var express = require("express");
 var logger = require('morgan');
+var cors = require('cors');
 
 var app = express();
 
@@ -8,6 +9,7 @@ const db = new sqlite3.Database(':memory:')
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(cors());
 
 db.serialize(() => {
     db.run('CREATE TABLE lorem (info TEXT)')

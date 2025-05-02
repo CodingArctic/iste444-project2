@@ -1,6 +1,6 @@
 .login-container  {
     width: 100%;
-    height: calc(100vh - 75px);
+    height: calc(100vh - 74.4px);
     background: var(--blue-700);
     background: radial-gradient(circle, var(--blue-700) 0%, var(--blue-500) 100%);
     display: flex;
