@@ -27,27 +27,27 @@ app.get('/api/cars', async function (req, res, next) {
     // db.all('SELECT vin, ownerId, make, mileage, price FROM Car', (err, rows) => {
     db.all('SELECT rowid AS id, * FROM lorem', (err, rows) => {
         if (rows.length > 1) {
-        res.type('application/json')
-        res.send(rows)
-    }
+            res.type('application/json')
+            res.send(rows)
+        }
     })
-    
+
 })
 
 app.get('/api/cars/:id', async function (req, res, next) {
-  db.get('SELECT * FROM lorem WHERE rowid = ?', req.params.id, (err, row) => {
-    if (err) {
-        res.status(500 )
-        res.send(err.message)
-    } else if (row) {
-        res.type('application/json')
-        res.send(row)
-    }
-    else {
-        res.status(404)
-        res.send('Car not found')
-    }
-})
+    db.get('SELECT * FROM lorem WHERE rowid = ?', req.params.id, (err, row) => {
+        if (err) {
+            res.status(500)
+            res.send(err.message)
+        } else if (row) {
+            res.type('application/json')
+            res.send(row)
+        }
+        else {
+            res.status(404)
+            res.send('Car not found')
+        }
+    })
 })
 
 app.post('/api/cars', async function (req, res, next) {
