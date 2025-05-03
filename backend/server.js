@@ -11,21 +11,51 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(cors());
 
-// TODO: write actual structure for car and user table
-// db.serialize(() => {
-//     db.run('CREATE TABLE lorem (info TEXT)')
-//     const stmt = db.prepare('INSERT INTO lorem VALUES (?)')
+app.get('/api/init', async function (req, res, next) {
+    db.serialize(() => {
+        // Drop tables if they exist
+        db.run('DROP TABLE IF EXISTS Car');
+        db.run('DROP TABLE IF EXISTS User');
 
-//     for (let i = 0; i < 10; i++) {
-//         stmt.run(`Car ${i}`)
-//     }
+        // Create tables
+        db.run(`
+            CREATE TABLE Car (
+                vin TEXT PRIMARY KEY,
+                ownerId INTEGER REFERENCES User,
+                make TEXT,
+                model TEXT,
+                year INTEGER,
+                mileage INTEGER,
+                price INTEGER
+            )
+        `);
+        db.run(`
+            CREATE TABLE User (
+                id INTEGER PRIMARY KEY,
+                username TEXT,
+                password TEXT
+            )
+        `);
 
-//     stmt.finalize()
-// })
+        // Insert sample data into User table
+        const stmt = db.prepare('INSERT INTO User (id, username) VALUES (?, ?)');
+        stmt.run(1, 'user1');
+        stmt.run(2, 'user2');
+        stmt.finalize();
+
+        // Insert sample data into Car table
+        const stmt2 = db.prepare('INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        stmt2.run('1GKFC13C88J190122', 1, 'Honda', 'Accord', 2008, 97384, 6500.00);
+        stmt2.run('1FMNU41S02EA54871', 2, 'Toyota', 'Sienna', 2011, 70853, 9000.00);
+        stmt2.finalize();
+    });
+
+    res.send('Database reset and initialized.');
+});
 
 app.get('/api/cars', async function (req, res, next) {
-    // db.all('SELECT vin, ownerId, make, mileage, price FROM Car', (err, rows) => {
-    db.all('SELECT rowid AS id, * FROM lorem', (err, rows) => {
+    db.all('SELECT vin, ownerId, make, model, year, mileage, price FROM Car', (err, rows) => {
+    // db.all('SELECT rowid AS id, * FROM lorem', (err, rows) => {
         if (rows.length > 1) {
             res.type('application/json')
             res.send(rows)
