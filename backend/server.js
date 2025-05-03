@@ -16,7 +16,7 @@ app.get('/api/init', async function (req, res, next) {
         // Drop tables if they exist
         db.run('DROP TABLE IF EXISTS User');
         db.run('DROP TABLE IF EXISTS Car');
-        
+
 
         // Create tables
         db.run(`
@@ -76,7 +76,7 @@ app.get('/api/car/:id', async function (req, res, next) {
         }
         else {
             res.status(404)
-            res.send('Car not found')
+            res.send({error: "No car found with specified VIN"})
         }
     })
 })
@@ -88,7 +88,7 @@ app.delete('/api/car/:vin', async function (req, res, next) {
             res.send(err.message)
         } else if (this.changes === 0) {
             res.status(404)
-            res.send('Car not found')
+            res.send({error: "No car found with specified VIN"})
         } else {
             res.status(204).send()
         }
@@ -100,26 +100,27 @@ app.get('/api/cars/:userId', async function (req, res, next) {
         if (err) {
             res.status(500)
             res.send(err.message)
-        } else if (rows) {
+        } else if (rows.length > 0) {
             res.type('application/json')
             res.send(rows)
         } else {
             res.status(404)
-            res.send('Car not found')
+            res.send({error: "No cars found with specified ownerId"})
         }
     })
 })
 
 app.post('/api/cars', async function (req, res, next) {
-    db.run("INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)", req.query.name, function (err) {
-        if (err) {
-            res.status(500)
-            res.send(err.message)
-        } else if (this.changes === 1) {
-            res.status(201).send()
-        }
-    })
-
+    db.run("INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [req.query.vin, req.query.ownerId, req.query.make, req.query.model, req.query.year, req.query.mileage, req.query.price],
+        function (err) {
+            if (err) {
+                res.status(400)
+                res.send(err.message)
+            } else if (this.changes === 1) {
+                res.status(201).send()
+            }
+        })
 })
 
 app.listen(8080);
