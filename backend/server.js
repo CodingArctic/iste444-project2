@@ -14,8 +14,9 @@ app.use(cors());
 app.get('/api/init', async function (req, res, next) {
     db.serialize(() => {
         // Drop tables if they exist
-        db.run('DROP TABLE IF EXISTS Car');
         db.run('DROP TABLE IF EXISTS User');
+        db.run('DROP TABLE IF EXISTS Car');
+        
 
         // Create tables
         db.run(`
@@ -46,6 +47,7 @@ app.get('/api/init', async function (req, res, next) {
         // Insert sample data into Car table
         const stmt2 = db.prepare('INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)');
         stmt2.run('1GKFC13C88J190122', 1, 'Honda', 'Accord', 2008, 97384, 6500.00);
+        stmt2.run('1GKFC13C88J190123', 2, 'Honda', 'Accord', 2009, 95315, 6900.00);
         stmt2.run('1FMNU41S02EA54871', 2, 'Toyota', 'Sienna', 2011, 70853, 9000.00);
         stmt2.finalize();
     });
@@ -64,8 +66,8 @@ app.get('/api/cars', async function (req, res, next) {
 
 })
 
-app.get('/api/cars/:id', async function (req, res, next) {
-    db.get('SELECT * FROM lorem WHERE rowid = ?', req.params.id, (err, row) => {
+app.get('/api/car/:id', async function (req, res, next) {
+    db.get('SELECT vin, ownerId, make, model, year, mileage, price FROM Car WHERE vin = ?', req.params.id, (err, row) => {
         if (err) {
             res.status(500)
             res.send(err.message)
@@ -74,6 +76,21 @@ app.get('/api/cars/:id', async function (req, res, next) {
             res.send(row)
         }
         else {
+            res.status(404)
+            res.send('Car not found')
+        }
+    })
+})
+
+app.get('/api/cars/:userId', async function (req, res, next) {
+    db.all('SELECT vin, ownerId, make, model, year, mileage, price FROM Car WHERE ownerId = ?', req.params.userId, (err, rows) => {
+        if (err) {
+            res.status(500)
+            res.send(err.message)
+        } else if (rows) {
+            res.type('application/json')
+            res.send(rows)
+        } else {
             res.status(404)
             res.send('Car not found')
         }
