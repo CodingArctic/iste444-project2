@@ -39,9 +39,9 @@ app.get('/api/init', async function (req, res, next) {
         `);
 
         // Insert sample data into User table
-        const stmt = db.prepare('INSERT INTO User (id, username) VALUES (?, ?)');
-        stmt.run(1, 'user1');
-        stmt.run(2, 'user2');
+        const stmt = db.prepare('INSERT INTO User (id, username, password) VALUES (?, ?, ?)');
+        stmt.run(1, 'user1', 'password1');
+        stmt.run(2, 'user2', 'password2');
         stmt.finalize();
 
         // Insert sample data into Car table
@@ -121,6 +121,18 @@ app.post('/api/cars', async function (req, res, next) {
                 res.status(201).send()
             }
         })
+})
+
+app.get('/api/auth', async function (req, res, next) {
+    db.get('SELECT id FROM User WHERE username = ? AND password = ?', [req.query.username, req.query.password], function (err, row) {
+        if (err) {
+            res.status(500).send(err.message)
+        } else if (row) {
+            res.send(row)
+        } else {
+            res.status(404).send()
+        }
+    })
 })
 
 app.listen(8080);
