@@ -57,7 +57,6 @@ app.get('/api/init', async function (req, res, next) {
 
 app.get('/api/cars', async function (req, res, next) {
     db.all('SELECT vin, ownerId, make, model, year, mileage, price FROM Car', (err, rows) => {
-    // db.all('SELECT rowid AS id, * FROM lorem', (err, rows) => {
         if (rows.length > 1) {
             res.type('application/json')
             res.send(rows)
@@ -82,6 +81,20 @@ app.get('/api/car/:id', async function (req, res, next) {
     })
 })
 
+app.delete('/api/car/:vin', async function (req, res, next) {
+    db.run('DELETE FROM Car WHERE vin = ?', req.params.vin, function (err) {
+        if (err) {
+            res.status(500)
+            res.send(err.message)
+        } else if (this.changes === 0) {
+            res.status(404)
+            res.send('Car not found')
+        } else {
+            res.status(204).send()
+        }
+    })
+})
+
 app.get('/api/cars/:userId', async function (req, res, next) {
     db.all('SELECT vin, ownerId, make, model, year, mileage, price FROM Car WHERE ownerId = ?', req.params.userId, (err, rows) => {
         if (err) {
@@ -98,7 +111,7 @@ app.get('/api/cars/:userId', async function (req, res, next) {
 })
 
 app.post('/api/cars', async function (req, res, next) {
-    db.run("INSERT INTO lorem VALUES (?)", req.query.name, function (err) {
+    db.run("INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)", req.query.name, function (err) {
         if (err) {
             res.status(500)
             res.send(err.message)
@@ -107,20 +120,6 @@ app.post('/api/cars', async function (req, res, next) {
         }
     })
 
-})
-
-app.delete('/api/cars/:id', async function (req, res, next) {
-    db.run('DELETE FROM lorem WHERE rowid = ?', req.params.id, function (err) {
-        if (err) {
-            res.status(500)
-            res.send(err.message)
-        } else if (this.changes === 0) {
-            res.status(404)
-            res.send('Car not found')
-        } else {
-            res.status(204).send()
-        }
-    })
 })
 
 app.listen(8080);
