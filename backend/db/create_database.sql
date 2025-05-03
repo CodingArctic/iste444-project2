@@ -4,6 +4,7 @@ CREATE TABLE Car (
     vin TEXT PRIMARY KEY,
     ownerId INTEGER REFERENCES User,
     make TEXT,
+    model TEXT,
     year INTEGER,
     mileage INTEGER,
     price INTEGER
