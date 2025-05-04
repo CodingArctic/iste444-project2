@@ -13,7 +13,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const data = await apiRequest(`/api/cars/${userId}`, 'GET');
+                const data = await apiRequest(`/api/cars`, 'GET');
                 setCars(data);
                 setLoading(false); 
             } catch (err) {
@@ -26,6 +26,10 @@ const Home = () => {
         }
     }, [userId]);
 
+    const handleDelete = (vin) => {
+        setCars((prevCars) => prevCars.filter((car) => car.vin !== vin));
+    };
+
     const handleLogin = () => {
         setContent('login', <Login />);
     }
@@ -33,8 +37,8 @@ const Home = () => {
     if (!userId) {
         return (
             <div className='home-container'>
-                <h2 className='home-title'>My Listings</h2>
-                <p className='home-description'>Please <button className='text-btn' onClick={handleLogin}>login</button> to view your listings.</p>
+                <h2 className='home-title'>Car Marketplace</h2>
+                <p className='home-description'>Please <button className='text-btn' onClick={handleLogin}>login</button> to view listings.</p>
             </div>
         );
     }
@@ -50,9 +54,9 @@ const Home = () => {
                     <p>No cars available.</p>
                 ) : (
                     <>
-                        {cars.map((car, index) => (
-                            <Card key={index} car={car} />
-                        ))}
+                    {cars.map((car, index) => (
+                        <Card key={index} car={car} onDelete={handleDelete} />
+                    ))}
                     </>
                 )}
             </div>

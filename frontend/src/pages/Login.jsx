@@ -20,7 +20,7 @@ const Login = () => {
         }
 
         try {
-            const data = await apiRequest('/api/login', 'POST', { username, password });
+            const data = await apiRequest('/api/auth', 'POST', { username, password });
             localStorage.setItem('userId', data.id);
             setUserId(data.id);
             setContent('home', <Home />);

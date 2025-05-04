@@ -4,11 +4,13 @@ import { apiRequest } from '../utils/apiRequest';
 import Login from './Login';
 import Card from '../components/Card'
 import './Home.css'
+import CarDialog from '../components/CarDialog';
 
 const MyListings = () => {
     const { setContent, userId } = useContent();
     const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     
     useEffect(() => {
         const fetchCars = async () => {
@@ -19,7 +21,6 @@ const MyListings = () => {
             } catch (err) {
                 setCars([]);
                 setLoading(false);
-                console.error('Error fetching cars:', err);
             }
         };
 
@@ -29,16 +30,32 @@ const MyListings = () => {
     }, [userId]);
 
     const handleAdd = () => {
-        // open modal to create a new car
+        setIsDialogOpen(true);
     }
 
     const handleDelete = (vin) => {
         setCars((prevCars) => prevCars.filter((car) => car.vin !== vin));
     };
 
+    const handleUpdate = (updatedCar) => {
+        setCars((prevCars) =>
+            prevCars.map((car) => (car.vin === updatedCar.vin ? updatedCar : car))
+        );
+    };
+
     const handleLogin = () => {
         setContent('login', <Login />);
     }
+
+    const handleDialogSubmit = async (formData) => {
+        try {
+            await apiRequest('/api/cars', 'POST', formData);
+            setCars((prevCars) => [...prevCars, formData]);
+            setIsDialogOpen(false);
+        } catch (err) {
+            console.error('Error adding car:', err);
+        }
+    };
 
     if (!userId) {
         return (
@@ -50,6 +67,7 @@ const MyListings = () => {
     }
 
 	return (
+        <>
         <div className='home-container'>
             <h2 className='home-title'>My Listings</h2>
             <p className='home-description'>The cars you have listed on the marketplace. You can view, edit, or delete them.</p>
@@ -61,13 +79,19 @@ const MyListings = () => {
                     <p>You don't have any cars listed.</p>
                 ) : (
                     <>
-                        {cars.map((car, index) => (
-                            <Card key={index} car={car} isOwn onDelete={handleDelete} />
-                        ))}
+                    {cars.map((car, index) => (
+                        <Card key={index} car={car} isOwn onDelete={handleDelete} onUpdate={handleUpdate} />
+                    ))}
                     </>
                 )}
             </div>
         </div>
+        <CarDialog
+            isOpen={isDialogOpen}
+            onClose={() => setIsDialogOpen(false)}
+            onSubmit={handleDialogSubmit}
+        />
+        </>
 	)
 }
 

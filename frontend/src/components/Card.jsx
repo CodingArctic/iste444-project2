@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { apiRequest } from '../utils/apiRequest';
+import CarDialog from './CarDialog';
 import './Card.css';
 
-const Card = ({ car, isOwn = false, onDelete }) => {
+const Card = ({ car, isOwn = false, onDelete, onUpdate }) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    
     // Format mileage
     const formattedMileage = new Intl.NumberFormat('en-US').format(car.mileage);
 
@@ -14,8 +17,7 @@ const Card = ({ car, isOwn = false, onDelete }) => {
     }).format(car.price);
 
     const handleEdit = () => {
-        // Logic to handle editing the car listing
-        console.log(`Editing car with VIN: ${car.vin}`);
+        setIsDialogOpen(true);
     }
 
     const handleDelete = async () => {
@@ -33,12 +35,36 @@ const Card = ({ car, isOwn = false, onDelete }) => {
         }
     };
 
-    const handleBuy = () => {
-        // Logic to handle buying the car
-        console.log(`Buying car with VIN: ${car.vin}`);
+    const handleBuy = async () => {
+        if (window.confirm(`Are you sure you want to buy this ${car.year} ${car.make} ${car.model}?`)) {
+            try {
+                await apiRequest(`/api/car/${car.vin}`, 'DELETE');
+                console.log(`Car with VIN: ${car.vin} purchased successfully.`);
+                if (onDelete) {
+                    onDelete(car.vin); // Notify parent to remove car from list
+                }
+            } catch (err) {
+                console.error('Error buying car:', err);
+                alert('An error occurred while buying the car.');
+            }
+        }
     }
 
+    const handleDialogSubmit = async (formData) => {
+        try {
+            await apiRequest(`/api/cars`, 'PUT', formData);
+            setIsDialogOpen(false);
+            if (onUpdate) {
+                onUpdate(formData); // Notify parent to update car details
+            }
+        } catch (err) {
+            console.error('Error updating car:', err);
+            alert('An error occurred while updating the car.');
+        }
+    };
+
     return (
+        <>
         <div className='card'>
             <h3 className='card-title'>{car.make} {car.model}</h3>
             <ul className='card-details'>
@@ -54,6 +80,13 @@ const Card = ({ car, isOwn = false, onDelete }) => {
                 <button onClick={handleBuy} className='card-button'>{formattedPrice}</button>
             )}
         </div>
+        <CarDialog
+            isOpen={isDialogOpen}
+            onClose={() => setIsDialogOpen(false)}
+            onSubmit={handleDialogSubmit}
+            initialData={car}
+        />
+        </>
     );
 };
 

@@ -1,0 +1,44 @@
+.dialog-wrapper {
+    /* display: none; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    &.open {
+        display: block;
+    }
+}
+
+.dialog-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 1rem;
+    z-index: 1001;
+    box-shadow: var(--shadow-400);
+}
+
+.dialog-box h2 {
+    margin-bottom: 1rem;
+}
+
+.dialog-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dialog-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}

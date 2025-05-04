@@ -29,7 +29,7 @@
 
 button {
     appearance: none;
-    border: none;
+    border: 2px solid var(--blue-400);
     border-radius: 8px;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
@@ -42,12 +42,23 @@ button {
 
 button:hover {
     background-color: var(--blue-500);
+    border-color: var(--blue-500);
+}
+
+button.delete {
+    background-color: var(--red-400);
+    border-color: var(--red-400);
+}
+
+button.delete:hover {
+    background-color: var(--red-500);
+    border-color: var(--red-500);
 }
 
 .outline-btn {
     background: none;
     color: var(--blue-500);
-    border: 2px solid var(--blue-500);
+    border-color: var(--blue-500);
 }
 
 .outline-btn:hover {
@@ -55,8 +66,21 @@ button:hover {
     color: var(--white);
 }
 
+.outline-btn.delete {
+    background: none;
+    color: var(--red-400);
+    border-color: var(--red-400);
+}
+
+.outline-btn.delete:hover {
+    background-color: var(--red-400);
+    border-color: var(--red-400);
+    color: var(--white);
+}
+
 .text-btn {
     background: none;
+    border: none;
     color: var(--blue-400);
     padding: 0;
 }

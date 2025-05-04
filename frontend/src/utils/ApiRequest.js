@@ -1,10 +1,8 @@
-import { useContent } from "./ContentProvider";
-
 export const apiRequest = async (url, method = 'GET', body = {}, headers = {}) => {
-    const { userId } = useContent(); 
+    const userId = localStorage.getItem('userId') || null;
     const requestBody = { ...body, requestorId: userId };
     const baseUrl = 'http://localhost:8080';
-
+    
     try {
         const response = await fetch(`${baseUrl}${url}`, {
             method,
@@ -19,9 +17,13 @@ export const apiRequest = async (url, method = 'GET', body = {}, headers = {}) =
             throw new Error(`http status: ${response.status}`);
         }
 
+        // Handle responses with no content
+        if (response.status === 204 || response.headers.get('content-length') === '0') {
+            return null;
+        }
+
         return await response.json();
     } catch (error) {
-        console.error('API Request Error:', error);
         throw error;
     }
 };
