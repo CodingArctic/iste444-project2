@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useContent } from '../utils/ContentProvider';
+import { apiRequest } from '../utils/apiRequest';
 import Home from './Home';
 import './Login.css';
 
@@ -19,31 +20,17 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/api/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            if (!response.ok) {
-                if (response.status === 404) {
-                    setError('Invalid username or password');
-                } else {
-                    setError('An error occurred. Please try again.');
-                }
-                return;
-            }
-
-            const data = await response.json();
+            const data = await apiRequest('/api/login', 'POST', { username, password });
             localStorage.setItem('userId', data.id);
             setUserId(data.id);
-
             setContent('home', <Home />);
         } catch (err) {
             console.error('Error during login:', err);
-            setError('An error occurred. Please try again.');
+            if (err.message.includes('404')) {
+                setError('Invalid username or password');
+            } else {
+                setError('An error occurred. Please try again.');
+            }
         }
     }
 

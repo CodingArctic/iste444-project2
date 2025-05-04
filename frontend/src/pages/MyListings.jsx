@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useContent } from '../utils/ContentProvider';
+import { apiRequest } from '../utils/apiRequest';
 import Login from './Login';
 import Card from '../components/Card'
 import './Home.css'
@@ -12,14 +13,12 @@ const MyListings = () => {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/cars/${userId}`, );
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
+                const data = await apiRequest(`/api/cars/${userId}`, 'GET');
                 setCars(data);
                 setLoading(false); 
             } catch (err) {
+                setCars([]);
+                setLoading(false);
                 console.error('Error fetching cars:', err);
             }
         };
@@ -27,7 +26,7 @@ const MyListings = () => {
         if (userId) {
             fetchCars();
         }
-    }, []);
+    }, [userId]);
 
     const handleAdd = () => {
         // open modal to create a new car

@@ -1,4 +1,5 @@
 import React from 'react';
+import { apiRequest } from '../utils/apiRequest';
 import './Card.css';
 
 const Card = ({ car, isOwn = false, onDelete }) => {
@@ -20,21 +21,10 @@ const Card = ({ car, isOwn = false, onDelete }) => {
     const handleDelete = async () => {
         if (window.confirm(`Are you sure you want to delete the car with VIN: ${car.vin}?`)) {
             try {
-                const response = await fetch(`http://localhost:8080/api/car/${car.vin}`, {
-                    method: 'DELETE',
-                });
-
-                if (response.status === 204) {
-                    console.log(`Car with VIN: ${car.vin} deleted successfully.`);
-                    if (onDelete) {
-                        onDelete(car.vin); 
-                    }
-                } else if (response.status === 404) {
-                    console.error('Car not found.');
-                    alert('Car not found.');
-                } else {
-                    console.error('Failed to delete the car.');
-                    alert('Failed to delete the car.');
+                await apiRequest(`/api/car/${car.vin}`, 'DELETE');
+                console.log(`Car with VIN: ${car.vin} deleted successfully.`);
+                if (onDelete) {
+                    onDelete(car.vin); // Pass up to parent
                 }
             } catch (err) {
                 console.error('Error deleting car:', err);

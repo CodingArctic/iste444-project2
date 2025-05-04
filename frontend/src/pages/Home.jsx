@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useContent } from '../utils/ContentProvider';
+import { apiRequest } from '../utils/apiRequest';
 import Login from './Login';
 import Card from '../components/Card';
 import './Home.css';
@@ -12,11 +13,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCars = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/cars');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
+                const data = await apiRequest(`/api/cars/${userId}`, 'GET');
                 setCars(data);
                 setLoading(false); 
             } catch (err) {
@@ -24,8 +21,10 @@ const Home = () => {
             }
         };
 
-        fetchCars();
-    }, []);
+        if (userId) {
+            fetchCars();
+        }
+    }, [userId]);
 
     const handleLogin = () => {
         setContent('login', <Login />);
