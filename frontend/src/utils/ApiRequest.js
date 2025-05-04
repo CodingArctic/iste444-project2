@@ -1,7 +1,8 @@
 export const apiRequest = async (url, method = 'GET', body = {}, headers = {}) => {
     const userId = localStorage.getItem('userId') || null;
     const requestBody = { ...body, requestorId: userId };
-    const baseUrl = 'http://localhost:8080';
+    // const baseUrl = 'http://localhost:8080'; // dev
+    const baseUrl = 'http://172.16.1.41:8080'; // vm
     
     try {
         const response = await fetch(`${baseUrl}${url}`, {
