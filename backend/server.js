@@ -16,7 +16,7 @@ app.use(logger(function (tokens, req, res) {
         tokens.url(req, res), '|',
         tokens.status(req, res), 'HTTP Status in',
         tokens['response-time'](req, res), 'ms |',
-        'UserID:', req.query.requestorId
+        'UserID:', req.body.requestorId
     ].join(' ')
 }));
 
