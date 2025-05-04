@@ -42,6 +42,7 @@ app.get('/api/init', async function (req, res, next) {
         const stmt = db.prepare('INSERT INTO User (id, username, password) VALUES (?, ?, ?)');
         stmt.run(1, 'user1', 'password1');
         stmt.run(2, 'user2', 'password2');
+        stmt.run(3, 'user3', 'password3');
         stmt.finalize();
 
         // Insert sample data into Car table

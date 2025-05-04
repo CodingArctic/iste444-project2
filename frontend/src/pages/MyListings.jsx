@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useContent } from '../utils/ContentProvider';
+import Login from './Login';
 import Card from '../components/Card'
 import './Home.css'
-import Login from './Login';
 
 const MyListings = () => {
     const { setContent, userId } = useContent();
@@ -17,7 +17,6 @@ const MyListings = () => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Fetched cars:', data);
                 setCars(data);
                 setLoading(false); 
             } catch (err) {
