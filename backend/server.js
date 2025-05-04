@@ -35,7 +35,12 @@ app.use(logger(customFormat, { stream: logStream }));
 // standard formatted logs to console
 app.use(logger('dev'))
 
-app.use(cors());
+app.use(cors({
+    // origin: 'http://localhost:5173', // dev
+    origin: 'http://172.16.1.41:5173', // vm
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.get('/api/init', async function (req, res, next) {
     db.serialize(() => {
