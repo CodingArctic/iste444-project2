@@ -123,12 +123,13 @@ app.post('/api/cars', async function (req, res, next) {
         })
 })
 
-app.get('/api/auth', async function (req, res, next) {
-    db.get('SELECT id FROM User WHERE username = ? AND password = ?', [req.query.username, req.query.password], function (err, row) {
+app.post('/api/auth', async function (req, res, next) {
+    const { username, password } = req.body;
+    db.get('SELECT id FROM User WHERE username = ? AND password = ?', [username, password], function (err, row) {
         if (err) {
             res.status(500).send(err.message)
         } else if (row) {
-            res.send(row)
+            res.json(row)
         } else {
             res.status(404).send()
         }

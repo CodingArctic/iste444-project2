@@ -12,6 +12,10 @@
     margin-top: 1rem;
 }
 
+.add-car-btn {
+    margin-top: 1rem;
+}
+
 @media (max-width: 1250px) {
     .home-container {
         padding: 1rem;

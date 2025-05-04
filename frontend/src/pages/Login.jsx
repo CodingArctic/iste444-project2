@@ -4,18 +4,47 @@ import Home from './Home';
 import './Login.css';
 
 const Login = () => {
-    const { setContent } = useContent();
-    const [email, setEmail] = useState('');
+    const { setContent, setUserId } = useContent();
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleSubmit = () => {
-        if (!email || !password) {
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        setError('');
+
+        if (!username || !password) {
             setError('Please fill in all fields');
             return;
         }
 
-        setContent(<Home />);
+        try {
+            const response = await fetch('http://localhost:8080/api/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    setError('Invalid username or password');
+                } else {
+                    setError('An error occurred. Please try again.');
+                }
+                return;
+            }
+
+            const data = await response.json();
+            localStorage.setItem('userId', data.id);
+            setUserId(data.id);
+
+            setContent('home', <Home />);
+        } catch (err) {
+            console.error('Error during login:', err);
+            setError('An error occurred. Please try again.');
+        }
     }
 
     return (
@@ -26,14 +55,14 @@ const Login = () => {
                     {error && <div className='error-msg'>{error}</div>}
                     <form className='login-section' onSubmit={handleSubmit}>
                         <div className='input-container'>
-                            <label className='input-label' htmlFor="email">Email</label>
+                            <label className='input-label' htmlFor="username">Username</label>
                             <input
                                 className='input-field'
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                type="text"
+                                id="username"
+                                name="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
                             />
                         </div>

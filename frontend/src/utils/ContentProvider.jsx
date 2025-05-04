@@ -4,17 +4,18 @@ import Home from '../pages/Home';
 const ContentContext = createContext();
 
 export const ContentProvider = ({ children }) => {
+    const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
     const [state, setState] = useState({
         name: 'home',
         content: <Home />,
-      });
+    });
 
     const setContent = (name, content) => {
         setState({ name, content });
-      };
+    };
 
     return (
-        <ContentContext.Provider value={{ state, setContent }}>
+        <ContentContext.Provider value={{ state, setContent, userId, setUserId }}>
             {children}
         </ContentContext.Provider>
     );

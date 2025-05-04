@@ -16,10 +16,9 @@ const Home = () => {
                 const data = await response.json();
                 console.log('Fetched cars:', data);
                 setCars(data);
+                setLoading(false); 
             } catch (err) {
                 console.error('Error fetching cars:', err);
-            } finally {
-                setLoading(false); 
             }
         };
 

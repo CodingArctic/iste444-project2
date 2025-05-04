@@ -6,12 +6,18 @@ import './Nav.css';
 import MyListings from '../pages/MyListings';
 
 const Nav = () => {
-    const { state, setContent } = useContent();
-    const [loggedIn, setLoggedIn] = useState(false);
+    const { state, setContent, userId, setUserId } = useContent();
 
     const handleLogin = () => {
-        // setLoggedIn(!loggedIn);
-        setContent('login', <Login />);
+        if (userId) {
+            // User is logged in, handle logout
+            setContent('home', <Home />);
+            localStorage.removeItem('userId');
+            setUserId(null);
+        } else {
+            // User is not logged in, handle login
+            setContent('login', <Login />);
+        }
     }
 
     const handleHome = () => {
@@ -34,7 +40,7 @@ const Nav = () => {
                         </ul>
                     )}
                 </div>
-                {state.name !== 'login' && <button onClick={handleLogin} className='outline-btn'>{loggedIn ? 'Logout' : 'Login'}</button>}
+                {state.name !== 'login' && <button onClick={handleLogin} className='outline-btn'>{userId ? 'Logout' : 'Login'}</button>}
             </div>
         </div>
     );
