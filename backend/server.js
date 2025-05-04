@@ -13,7 +13,7 @@ const db = new sqlite3.Database('./db/db.sqlite')
 // create stream for logging to file
 const logStream = fs.createWriteStream(path.join(__dirname, '/logs/access.log'), { flags: 'a' })
 // custom log format
-const customFormat = function (tokens, req, res) {
+function customFormat (tokens, req, res) {
     const requestorId = req.body?.requestorId || 'N/A';
     return [
         tokens.method(req, res),
