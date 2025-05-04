@@ -81,10 +81,8 @@ app.get('/api/init', async function (req, res, next) {
 
 app.get('/api/cars', async function (req, res, next) {
     db.all('SELECT vin, ownerId, make, model, year, mileage, price FROM Car', (err, rows) => {
-        if (rows.length > 1) {
-            res.type('application/json')
-            res.send(rows)
-        }
+        res.type('application/json')
+        res.send(rows)
     })
 
 })
