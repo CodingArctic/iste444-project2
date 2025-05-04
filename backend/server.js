@@ -7,9 +7,19 @@ var app = express();
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('./db/db.sqlite')
 
-app.use(logger('dev'));
+
 app.use(express.json());
 app.use(cors());
+app.use(logger(function (tokens, req, res) {
+    return [
+        tokens.method(req, res),
+        tokens.url(req, res), '|',
+        tokens.status(req, res), 'HTTP Status in',
+        tokens['response-time'](req, res), 'ms |',
+        'UserID:', req.query.requestorId
+    ].join(' ')
+}));
+
 
 app.get('/api/init', async function (req, res, next) {
     db.serialize(() => {
@@ -76,7 +86,7 @@ app.get('/api/car/:id', async function (req, res, next) {
         }
         else {
             res.status(404)
-            res.send({error: "No car found with specified VIN"})
+            res.send({ error: "No car found with specified VIN" })
         }
     })
 })
@@ -88,7 +98,7 @@ app.delete('/api/car/:vin', async function (req, res, next) {
             res.send(err.message)
         } else if (this.changes === 0) {
             res.status(404)
-            res.send({error: "No car found with specified VIN"})
+            res.send({ error: "No car found with specified VIN" })
         } else {
             res.status(204).send()
         }
@@ -105,14 +115,15 @@ app.get('/api/cars/:userId', async function (req, res, next) {
             res.send(rows)
         } else {
             res.status(404)
-            res.send({error: "No cars found with specified ownerId"})
+            res.send({ error: "No cars found with specified ownerId" })
         }
     })
 })
 
 app.post('/api/cars', async function (req, res, next) {
+    const {vin, ownerId, make, model, year, mileage, price} = req.body;
     db.run("INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [req.query.vin, req.query.ownerId, req.query.make, req.query.model, req.query.year, req.query.mileage, req.query.price],
+        [vin, ownerId, make, model, year, mileage, price],
         function (err) {
             if (err) {
                 res.status(400)
