@@ -11,7 +11,9 @@ const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('./db/db.sqlite')
 
 // create stream for logging to file
-const logStream = fs.createWriteStream(path.join(__dirname, '/logs/access.log'), { flags: 'a' })
+const logsDir = path.join(__dirname, '/logs');
+fs.mkdirSync(logsDir, {recursive: true});
+const logStream = fs.createWriteStream(path.join(logsDir, '/access.log'), {flags: 'a'})
 // custom log format
 function customFormat (tokens, req, res) {
     const requestorId = req.body?.requestorId || 'N/A';
@@ -23,7 +25,7 @@ function customFormat (tokens, req, res) {
         tokens['response-time'](req, res), 'ms |',
         'UserID:', requestorId
     ].join(' ');
-};
+}
 
 app.use(express.json());
 
