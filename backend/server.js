@@ -1,25 +1,39 @@
 var express = require("express");
 var logger = require('morgan');
 var cors = require('cors');
+var fs = require('fs');
+var path = require('path');
+
 
 var app = express();
 
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('./db/db.sqlite')
 
+// create stream for logging to file
+const logStream = fs.createWriteStream(path.join(__dirname, '/logs/access.log'), { flags: 'a' })
 
-app.use(express.json());
-app.use(cors());
-app.use(logger(function (tokens, req, res) {
+// custom log format
+const customFormat = function (tokens, req, res) {
+    const requestorId = req.body?.requestorId || 'N/A';
     return [
         tokens.method(req, res),
         tokens.url(req, res), '|',
         tokens.status(req, res), 'HTTP Status in',
         tokens['response-time'](req, res), 'ms |',
-        'UserID:', req.body.requestorId
-    ].join(' ')
-}));
+        'UserID:', requestorId
+    ].join(' ');
+};
 
+app.use(express.json());
+
+// add morgan with custom logging format and log file stream
+app.use(logger(customFormat, { stream: logStream }));
+
+// standard formatted logs to console
+app.use(logger('dev'))
+
+app.use(cors());
 
 app.get('/api/init', async function (req, res, next) {
     db.serialize(() => {
