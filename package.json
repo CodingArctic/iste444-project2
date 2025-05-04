@@ -5,7 +5,7 @@
     "scripts": {
         "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
         "start-backend": "cd backend && node server.js",
-        "start-frontend": "cd frontend && npm run dev",
+        "start-frontend": "cd frontend && npm run host",
         "install": "concurrently \"cd backend && npm install\" \"cd frontend && npm install\""
     },
     "devDependencies": {

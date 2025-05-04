@@ -16,6 +16,7 @@ const logStream = fs.createWriteStream(path.join(__dirname, '/logs/access.log'),
 function customFormat (tokens, req, res) {
     const requestorId = req.body?.requestorId || 'N/A';
     return [
+        new Date().toISOString(), '|',
         tokens.method(req, res),
         tokens.url(req, res), '|',
         tokens.status(req, res), 'HTTP Status in',
