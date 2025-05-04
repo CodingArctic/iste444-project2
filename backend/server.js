@@ -1,18 +1,17 @@
-var express = require("express");
-var logger = require('morgan');
-var cors = require('cors');
-var fs = require('fs');
-var path = require('path');
+const express = require("express");
+const logger = require('morgan');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 
-var app = express();
+const app = express();
 
 const sqlite3 = require('sqlite3').verbose()
 const db = new sqlite3.Database('./db/db.sqlite')
 
 // create stream for logging to file
 const logStream = fs.createWriteStream(path.join(__dirname, '/logs/access.log'), { flags: 'a' })
-
 // custom log format
 const customFormat = function (tokens, req, res) {
     const requestorId = req.body?.requestorId || 'N/A';
