@@ -122,7 +122,7 @@ app.get('/api/cars/:userId', async function (req, res, next) {
 })
 
 app.post('/api/cars', async function (req, res, next) {
-    const {vin, ownerId, make, model, year, mileage, price} = req.body;
+    const { vin, ownerId, make, model, year, mileage, price } = req.body;
     db.run("INSERT INTO Car (vin, ownerId, make, model, year, mileage, price) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [vin, ownerId, make, model, year, mileage, price],
         function (err) {
@@ -131,6 +131,20 @@ app.post('/api/cars', async function (req, res, next) {
                 res.send(err.message)
             } else if (this.changes === 1) {
                 res.status(201).send()
+            }
+        })
+})
+
+app.put('/api/cars', async function (req, res, next) {
+    const { vin, ownerId, make, model, year, mileage, price } = req.body;
+    db.run("UPDATE Car SET ownerId = ?, make = ?, model = ?, year = ?, mileage = ?, price = ? WHERE vin = ?",
+        [ownerId, make, model, year, mileage, price, vin],
+        function (err) {
+            if (err) {
+                res.status(400)
+                res.send(err.message)
+            } else if (this.changes === 1) {
+                res.status(200).send()
             }
         })
 })
