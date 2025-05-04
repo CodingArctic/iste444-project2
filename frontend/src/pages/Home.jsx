@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useContent } from '../utils/ContentProvider';
+import Login from './Login';
 import Card from '../components/Card';
 import './Home.css';
 
 const Home = () => {
+    const { setContent, userId } = useContent();
     const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -14,7 +17,6 @@ const Home = () => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Fetched cars:', data);
                 setCars(data);
                 setLoading(false); 
             } catch (err) {
@@ -24,6 +26,19 @@ const Home = () => {
 
         fetchCars();
     }, []);
+
+    const handleLogin = () => {
+        setContent('login', <Login />);
+    }
+
+    if (!userId) {
+        return (
+            <div className='home-container'>
+                <h2 className='home-title'>My Listings</h2>
+                <p className='home-description'>Please <button className='text-btn' onClick={handleLogin}>login</button> to view your listings.</p>
+            </div>
+        );
+    }
     
     return (
         <div className='home-container'>
