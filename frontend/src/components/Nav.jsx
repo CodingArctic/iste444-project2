@@ -11,7 +11,7 @@ const Nav = () => {
     const handleLogin = () => {
         if (userId) {
             // User is logged in, handle logout
-            setContent('home', <Home />);
+            setContent('login', <Login />);
             localStorage.removeItem('userId');
             setUserId(null);
         } else {
