@@ -36,7 +36,7 @@ const Nav = () => {
                     {state.name !== 'login' && (
                         <ul className='nav-items'>
                             <li onClick={handleHome} className={`nav-item ${state.name === 'home' ? 'active' : ''}`}>Home</li>
-                            <li onClick={handleMyListings} className={`nav-item ${state.name === 'about' ? 'active' : ''}`}>My Listings</li>
+                            <li onClick={handleMyListings} className={`nav-item ${state.name === 'myListings' ? 'active' : ''}`}>My Listings</li>
                         </ul>
                     )}
                 </div>
