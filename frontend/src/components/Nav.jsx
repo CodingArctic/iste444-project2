@@ -25,7 +25,7 @@ const Nav = () => {
     }
 
     const handleMyListings = () => {
-        setContent('about', <MyListings />);
+        setContent('myListings', <MyListings />);
     }
 
     return (

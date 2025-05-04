@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useContent } from '../utils/ContentProvider';
 import Card from '../components/Card'
 import './Home.css'
+import Login from './Login';
 
 const MyListings = () => {
-    const { userId } = useContent();
+    const { setContent, userId } = useContent();
     const [cars, setCars] = useState([]);
     const [loading, setLoading] = useState(true);
     
@@ -24,7 +25,9 @@ const MyListings = () => {
             }
         };
 
-        fetchCars();
+        if (userId) {
+            fetchCars();
+        }
     }, []);
 
     const handleAdd = () => {
@@ -34,6 +37,19 @@ const MyListings = () => {
     const handleDelete = (vin) => {
         setCars((prevCars) => prevCars.filter((car) => car.vin !== vin));
     };
+
+    const handleLogin = () => {
+        setContent('login', <Login />);
+    }
+
+    if (!userId) {
+        return (
+            <div className='home-container'>
+                <h2 className='home-title'>My Listings</h2>
+                <p className='home-description'>Please <button className='text-btn' onClick={handleLogin}>login</button> to view your listings.</p>
+            </div>
+        );
+    }
 
 	return (
         <div className='home-container'>
