@@ -23,7 +23,7 @@
 After cloning the repo and opening a CMD at the root of the project:
 1. Run `npm i`
 2. Install node nodules for application: `npm run install`
-3. Run `npm run start`
+3. Run `npm run start` - this will start the frontend and backend services
 4. Depending on your environment (hosted or development) you will want to change the two relevant URL lines in `frontend/src/utils/apiRequest.js`, as well as `backend/server.js`
 
-This will start the frontend and backend services.
+
