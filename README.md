@@ -10,6 +10,7 @@
 - Create, Read, Update, and Delete (Purchase) GUI actions, with REST API for each function
 - Basic (demo-level, non-hashed) user authentication
 - Per user car ownership/index
+- Custom logging to file
 
 ## Stack
 - SQLite
