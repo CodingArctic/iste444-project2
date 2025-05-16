@@ -1,4 +1,4 @@
-# Proof of Concept Car Marketplace (ISTE444-2245 Group 9)
+# CRUD Car Marketplace Demo (ISTE444-2245 Group 9)
 
 ## Group Members
 - Clyde	Geyer cag1831@rit.edu
